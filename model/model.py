@@ -1,8 +1,11 @@
 import torch, torch.nn as nn
 import torch.nn.functional as F
+import numpy as np
+import random
+
 
 class CharLSTMLoop_hidden(nn.Module):
-    def __init__(self, num_tokens=num_tokens, emb_size=16, rnn_num_units=64):
+    def __init__(self, num_tokens, emb_size=16, rnn_num_units=64):
         super(self.__class__, self).__init__()
         self.emb = nn.Embedding(num_tokens, emb_size)
         self.lstm = nn.LSTM(emb_size, rnn_num_units, batch_first=True)
