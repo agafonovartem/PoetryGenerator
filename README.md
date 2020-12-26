@@ -13,14 +13,19 @@ How to run:
 2. Create conda env:
 
     ENV_NAME=poetry_generator
+
     conda create -y -n $ENV_NAME python=3.7
+
     conda activate $ENV_NAME
+
     pip install -r requirements.txt
+
     ipython kernel install --user --name=$ENV_NAME
 
 3. Run next code in console:
 
 	export FLASK_APP=poetry_generator.py
+
 	flask run
 
 4. Open local URL
