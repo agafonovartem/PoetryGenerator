@@ -1,32 +1,44 @@
 from flask import Flask, render_template, request
 import torch
+import os
 from model import model
+from model import dataset
+from model import generator
 
+path = os.path.split(os.path.realpath(__file__))[0]
 app = Flask(__name__)
 poetry_text = ''
-generator_model = model.CharLSTMLoop_hidden()
+
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index(poetry_text=poetry_text):
     if request.method == 'POST':
         name = request.form.get('name')
-        beginning = request.form.get('beginning')
-        size = request.form.get('size')
-        #if beginning == '':
-        #    poetry_text = 'Beginning is required.'
-        #    return render_template('style.html', poetry_text=poetry_text)
+        beginning = request.form.get('beginning').lower()
+        size = int(request.form.get('size'))
+        if beginning == '':
+            poetry_text = 'Beginning is required.'
+            return render_template('style.html', poetry_text=poetry_text)
 
         if name == 'Shakespeare':
-            if match_en(beginning):
-                generator_model.load_state_dict(torch.load('/model/model_lstm_hidden.pth'))
-                poetry_text = str(model.generate_text_hidden(length=size, initial=beginning))
+            if not match_ru(beginning):
+                ds = dataset.Dataset(path + '/model/sonnets_upd.txt')
+                lstm = model.CharLSTMLoop_hidden(num_tokens=ds.num_tokens)
+                if (torch.cuda.is_available()):
+                    lstm = lstm.cuda()
+                lstm.load_state_dict(torch.load(path + '/model/model_lstm_shakespeare.pth', map_location='cpu'))
+                poetry_text = str(generator.generate_text_hidden(length=size, initial=beginning, model=lstm, dataset=ds))
             else:
                 poetry_text = 'The language of the poet is English.'
         if name == 'Пушкин':
-            if match_ru(beginning):
-                generator_model.load_state_dict(torch.load('/model/model_lstm_hidden.pth'))
-                poetry_text = str(model.generate_text_hidden(length=size, initial=beginning))
+            if not match_en(beginning):
+                ds = dataset.Dataset(path + '/model/sonnets_upd.txt')
+                lstm = model.CharLSTMLoop_hidden(num_tokens=ds.num_tokens)
+                if (torch.cuda.is_available()):
+                    lstm = lstm.cuda()
+                lstm.load_state_dict(torch.load(path + '/model/model_lstm_shakespeare.pth', map_location='cpu'))
+                poetry_text = str(generator.generate_text_hidden(length=size, initial=beginning, model=lstm, dataset=ds))
             else:
                 poetry_text = 'The language of the poet is Russian.'
 

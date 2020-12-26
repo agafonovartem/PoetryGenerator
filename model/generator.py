@@ -4,8 +4,7 @@ import torch, torch.nn as nn
 import torch.nn.functional as F
 import random
 
-from dataset import Dataset
-from model import CharLSTMLoop_hidden
+#from model import CharLSTMLoop_hidden
 
 
 def generate_text_hidden(length, model, dataset, initial = ' ', temperature=1.0):
@@ -49,10 +48,3 @@ def generate_text_hidden(length, model, dataset, initial = ' ', temperature=1.0)
           return ''.join([dataset.tokens[ix] for ix in x_sequence.cpu().data.numpy()[0][0]])
     return ''.join([dataset.tokens[ix] for ix in x_sequence.data.numpy()[0][0]])
 
-
-ds = Dataset('sonnets_upd.txt')
-lstm = CharLSTMLoop_hidden(num_tokens=ds.num_tokens)
-if (torch.cuda.is_available()):
-  lstm = lstm.cuda()
-lstm.load_state_dict(torch.load('/content/model_lstm_hidden.pth'))
-print(str(generate_text_hidden(length=500, model=lstm, dataset=ds)))
