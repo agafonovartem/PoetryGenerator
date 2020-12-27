@@ -5,6 +5,7 @@ from model import model
 from model import dataset
 from model import generator
 
+
 path = os.path.split(os.path.realpath(__file__))[0]
 app = Flask(__name__)
 poetry_text = ''
@@ -28,17 +29,19 @@ def index(poetry_text=poetry_text):
                 if (torch.cuda.is_available()):
                     lstm = lstm.cuda()
                 lstm.load_state_dict(torch.load(path + '/model/model_lstm_shakespeare.pth', map_location='cpu'))
-                poetry_text = str(generator.generate_text_hidden(length=size, initial=beginning, model=lstm, dataset=ds))
+                poetry_text = generator.generate_text_hidden(length=size, initial=beginning + str(' ') , model=lstm, dataset=ds, temperature=1.1)
+                poetry_text = poetry_text.replace('\n', '<br>')
             else:
                 poetry_text = 'The language of the poet is English.'
-        if name == 'Пушкин':
+        if name == 'Pushkin':
             if not match_en(beginning):
-                ds = dataset.Dataset(path + '/model/sonnets_upd.txt')
+                ds = dataset.Dataset(path + '/model/parsed_pushkin_short.txt')
                 lstm = model.CharLSTMLoop_hidden(num_tokens=ds.num_tokens)
                 if (torch.cuda.is_available()):
                     lstm = lstm.cuda()
-                lstm.load_state_dict(torch.load(path + '/model/model_lstm_shakespeare.pth', map_location='cpu'))
-                poetry_text = str(generator.generate_text_hidden(length=size, initial=beginning, model=lstm, dataset=ds))
+                lstm.load_state_dict(torch.load(path + '/model/model_lstm_pushkin_short.pth', map_location='cpu'))
+                poetry_text = str(generator.generate_text_hidden(length=size, initial=beginning + str(' '), model=lstm, dataset=ds, temperature=0.85))
+                poetry_text = poetry_text.replace('\n', '<br>')
             else:
                 poetry_text = 'The language of the poet is Russian.'
 

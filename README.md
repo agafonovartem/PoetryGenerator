@@ -1,6 +1,6 @@
 # poetry_generator
 
-Generates poetry of famous poets by beginning (space= ' ' can be used too, as an easy beginning)
+Generates poetry of famous poets by beginning
 
 Now the application can generate textes that rely on poems of:
 * Shakespeare
