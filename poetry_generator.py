@@ -15,7 +15,7 @@ poetry_text = ''
 def index(poetry_text=poetry_text):
     if request.method == 'POST':
         name = request.form.get('name')
-        beginning = request.form.get('beginning').lower()
+        beginning = request.form.get('beginning').lower() + ' '
         size = int(request.form.get('size'))
         if beginning == '':
             poetry_text = 'Beginning is required.'
