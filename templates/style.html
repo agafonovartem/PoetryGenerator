@@ -7,26 +7,58 @@
     <style type = "text/css">
          .myclass {
             background-color: #FFFFFF;
-            font-family: arial;
+            font-family: "Brush Script MT";
+            font-size:35px !important; 
+            color:#000000;
             margin: 50px;
             padding: 50px;
             border: 2px solid #aaa;
          }
+         body {
+            background-image: url("/static/templates/wallpaper.jpg"); 
+            /* Center and scale the image nicely */
+    
+             background-repeat: repeat;
+          
+          background-color: #c7b39b; /* Цвет фона */
+         }
+         
+         h2{
+             font-size:65px !important;
+             font-family: "Brush Script MT";
+             color:#FFFFFF;
+        }       
+        p{
+            font-size:35px !important;
+             font-family: "Brush Script MT";
+             color:#FFFFFF;
+        }
+        legend{
+            font-size:35px !important;
+             font-family: "Brush Script MT";
+             color:#FFFFFF;
+        }
+        optgroup{ 
+            font-size:40px !important; 
+        }
     </style>
 
 </head>
-    <body bgcolor="#CCFFCC">
+    <body>
         <form method="post">
             <center>
-                <h2 style="font-family:arial;"> Choose the name of the poet <br />
-                    and enter the beginning of the poetry:</h2>
-                <select name = "name" id = "name">
-                    <option value="Shakespeare">Shakespeare</option>
-                    <option value="Пушкин">Пушкин</option>
+                <h2> <br />
+                CHOOSE THE NAME OF THE POET <br />
+                    AND ENTER THE BEGINNIG OF THE POEM:</h2>
+                <select name = "name" id = "name"  style="width: 900px; height: 100px">
+                    <optgroup>
+                         <option value="Shakespeare">Shakespeare</option>
+                        <option value="Пушкин">Пушкин</option>
+                    </optgroup>
                 </select>
 
-                <p style="font-family:arial;"> Beginning:
-                    <input style="font-family:arial; width:300px;" type = "text" name = "beginning" /></p>
+                <p> Beginning:
+                    <input style="font-family:Brush Script MT; width:300px; height: 50px; font-size:35px" type = "text" name = "beginning" /></p>
 
                 <fieldset style="width:400px"> <legend> Size (in symbols) </legend>
                 <p><input type="range" min="10" max="5000" name="size"
@@ -51,7 +83,9 @@
             </center>
         </form>
         <center>
+            {% autoescape false %}
             <p class = "myclass"> {{ poetry_text }} </p>
+            {% endautoescape %}
         </center>
     </body>
 </html>
